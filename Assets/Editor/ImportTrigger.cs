@@ -99,6 +99,9 @@ namespace Editor
             // We do this with a single one per frame here, but that is optional.
             // The common case where everything is cached has already been handled when we kick of imports.
             
+            // You can also check AssetDatabase.GlobalArtifactProcessedVersion to see whether anything changed at all.
+            // If that number didn't change since the last time you looked at it, there can be no new artifacts.
+            
             if (!s_ImportsInFlight.TryPeek(out var headKey))
             {
                 if (s_ProgressId != 0)
