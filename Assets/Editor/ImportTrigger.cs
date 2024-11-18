@@ -41,15 +41,15 @@ namespace Editor
             }
             
             // Actually produce the imported artifacts.
-            // We get an artifact id for every single import we request:
-            //  * If the artifact still needs to be produced, the id is invalid.
-            //  * If the artifact was already produced previously and we merely looked it up, it is valid.
             var importerType = typeof(MyScriptableObjectImporter);
             var artifactIds = AssetDatabaseExperimental.ProduceArtifactsAsync(
                 guids,
                 importerType
             );
 
+            // We get an artifact id for every single import we request:
+            //  * If the artifact still needs to be produced, the id is invalid.
+            //  * If the artifact was already produced previously and we merely looked it up, it is valid.
             bool anyInFlight = false;
             for (int i = 0; i < artifactIds.Length; i++)
             {
