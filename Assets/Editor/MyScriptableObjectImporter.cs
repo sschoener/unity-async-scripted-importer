@@ -2,11 +2,12 @@ using System.IO;
 using System.Threading;
 using UnityEditor;
 using UnityEditor.AssetImporters;
+using UnityEditor.Experimental;
 
 // If you make any changes to the scripted importer, you need to bump the version number so existing cached imports are
 // invalidated correctly. Similarly, you still need to be very careful to correctly declare all the dependencies of your
 // code.
-[ScriptedImporter(15, "ExtDontMatter", AllowCaching = true)]
+[ScriptedImporter(16, "ExtDontMatter", AllowCaching = true)]
 public class MyScriptableObjectImporter : ScriptedImporter
 {
     public override void OnImportAsset(AssetImportContext ctx)
@@ -16,6 +17,11 @@ public class MyScriptableObjectImporter : ScriptedImporter
         // This also has another side effect: This load here reads data from disk. If you modify your object in memory
         // but then don't save it to disk, the importer won't see the new version.
         MyScriptableObject obj = AssetDatabase.LoadAssetAtPath<MyScriptableObject>(ctx.assetPath);
+        
+        // We are loading the scriptable object, which is not a source asset but the primary artifact of an import.
+        // For completeness, we should declare a dependency on that primary artifact. To be explicit, we construct the
+        // key with a null importer type, which means that we are referring to the primary artifact.
+        ctx.DependsOnArtifact(new ArtifactKey(AssetDatabase.GUIDFromAssetPath(ctx.assetPath), null));
 
         // simulate a slow import
         Thread.Sleep(1000);
